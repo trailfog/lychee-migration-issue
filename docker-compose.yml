@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  mariadb:
+    container_name: mariadb
+    image: mariadb:10
+    networks:
+      - backend
+    environment:
+      - MYSQL_ROOT_PASSWORD=my-root-pw
+      - MARIADB_USER=lychee
+      - MARIADB_PASSWORD=supersecret
+      - MARIADB_DATABASE=lychee
+    restart: unless-stopped
+
+  lychee:
+    image: lycheeorg/lychee:v5.0.2
+    container_name: lychee
+    ports:
+      - 8080:80
+    networks:
+      - backend
+    volumes:
+      - ./lychee/.env:/conf/.env
+    environment:
+      - PUID=1000
+      - PGID=100
+      - STARTUP_DELAY=5
+    restart: unless-stopped
+    depends_on:
+      - mariadb
+
+networks:
+  backend:
