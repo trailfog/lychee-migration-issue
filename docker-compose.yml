@@ -6,6 +6,8 @@ services:
     image: mariadb:10
     networks:
       - backend
+    volumes:
+      - mariadb:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=my-root-pw
       - MARIADB_USER=lychee
@@ -32,3 +34,6 @@ services:
 
 networks:
   backend:
+
+volumes:
+  mariadb:
